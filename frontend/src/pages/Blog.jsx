@@ -1,12 +1,11 @@
-import Hero from "../components/frontend/home/Hero";
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 import { Helmet } from "react-helmet-async";
 import { useSiteSettings } from "../context/SiteSettingsContext";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-const Home = () => {
+const Blog = () => {
     const { settings } = useSiteSettings();
     const siteTitle = settings?.websiteTitle || "MERN Blog";
     const API_BASE = useMemo(
@@ -35,8 +34,12 @@ const Home = () => {
             .trim();
     };
 
-    const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [posts, setPosts] = useState([]);
+    const [query, setQuery] = useState("");
+    const [pageIndex, setPageIndex] = useState(0);
+
+    const pageSize = 8;
 
     useEffect(() => {
         (async () => {
@@ -51,34 +54,68 @@ const Home = () => {
         })();
     }, [API_BASE]);
 
-    const latestFour = useMemo(() => {
+    const filtered = useMemo(() => {
+        const q = query.trim().toLowerCase();
         const items = Array.isArray(posts) ? posts.slice() : [];
         items.sort((a, b) => {
             const aTime = a?.createdAt ? new Date(a.createdAt).getTime() : 0;
             const bTime = b?.createdAt ? new Date(b.createdAt).getTime() : 0;
             return bTime - aTime;
         });
-        return items.slice(0, 4);
-    }, [posts]);
+
+        if (!q) return items;
+        return items.filter((p) => {
+            const haystack = [p?.title, p?.author, stripHtml(p?.content)]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+            return haystack.includes(q);
+        });
+    }, [posts, query]);
+
+    const pageCount = useMemo(() => {
+        return Math.max(1, Math.ceil(filtered.length / pageSize));
+    }, [filtered.length]);
+
+    const safePageIndex = Math.min(pageIndex, pageCount - 1);
+
+    const currentPage = useMemo(() => {
+        const start = safePageIndex * pageSize;
+        return filtered.slice(start, start + pageSize);
+    }, [filtered, safePageIndex]);
 
     return (
-        <div>
+        <div className="container mx-auto px-5 md:px-0 py-10">
             <Helmet>
-                <title>{`Home | ${siteTitle}`}</title>
+                <title>{`Blog | ${siteTitle}`}</title>
             </Helmet>
-            <Hero />
-            <div className="container mx-auto px-5 md:px-0 py-3 md:py-6">
-                <h2 className="text-2xl md:text-4xl font-bold mb-4 text-center">Latest Articles</h2>
+            <h1 className="text-3xl md:text-5xl font-bold text-center">Blog</h1>
 
-                {loading && <p className="text-center text-stone-600">Loading...</p>}
+            <div className="mt-6 flex items-center justify-between gap-3 flex-wrap">
+                <input
+                    value={query}
+                    onChange={(e) => {
+                        setQuery(e.target.value);
+                        setPageIndex(0);
+                    }}
+                    placeholder="Search posts..."
+                    className="w-full md:w-[420px] rounded border border-stone-400 p-2"
+                />
+                <p className="text-sm text-stone-600">
+                    {loading ? "" : `${filtered.length} post(s)`}
+                </p>
+            </div>
 
-                {!loading && latestFour.length === 0 && (
-                    <p className="text-center text-stone-600">No posts found</p>
-                )}
+            {loading && <p className="mt-8 text-center text-stone-600">Loading...</p>}
 
-                {!loading && latestFour.length > 0 && (
-                    <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {latestFour.map((post) => {
+            {!loading && filtered.length === 0 && (
+                <p className="mt-8 text-center text-stone-600">No posts found</p>
+            )}
+
+            {!loading && filtered.length > 0 && (
+                <>
+                    <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {currentPage.map((post) => {
                             const id = post?._id || post?.id;
                             const title = post?.title || "Untitled";
                             const author = post?.author || "";
@@ -86,23 +123,24 @@ const Home = () => {
                                 ? new Date(post.createdAt).toLocaleDateString()
                                 : "";
                             const imageSrc = resolveImageUrl(post?.featuredImage);
-                            const excerpt = stripHtml(post?.content).slice(0, 110);
+                            const contentText = stripHtml(post?.content);
+                            const excerpt = contentText.slice(0, 120);
 
                             return (
                                 <div
                                     key={id || title}
                                     className="border border-stone-200 rounded-lg overflow-hidden bg-white"
                                 >
-                                    <div className="w-full h-40 bg-stone-100">
+                                    <div className="w-full h-44 bg-stone-100">
                                         {imageSrc ? (
                                             <img
                                                 src={imageSrc}
                                                 alt={title}
-                                                className="w-full h-40 object-cover"
+                                                className="w-full h-44 object-cover"
                                                 loading="lazy"
                                             />
                                         ) : (
-                                            <div className="w-full h-40 grid place-items-center text-stone-500">
+                                            <div className="w-full h-44 grid place-items-center text-stone-500">
                                                 No image
                                             </div>
                                         )}
@@ -117,9 +155,10 @@ const Home = () => {
                                             {author && createdAt && <span> · </span>}
                                             {createdAt && <span>{createdAt}</span>}
                                         </p>
+
                                         {excerpt && (
                                             <p className="mt-3 text-sm text-stone-700">
-                                                {excerpt}{stripHtml(post?.content).length > 110 ? "..." : ""}
+                                                {excerpt}{contentText.length > 120 ? "..." : ""}
                                             </p>
                                         )}
 
@@ -141,10 +180,42 @@ const Home = () => {
                             );
                         })}
                     </div>
-                )}
-            </div>
+
+                    <div className="mt-8 flex items-center justify-between gap-3">
+                        <p className="text-sm text-stone-600">
+                            Page {safePageIndex + 1} of {pageCount}
+                        </p>
+                        <div className="flex items-center gap-2">
+                            <button
+                                type="button"
+                                onClick={() => setPageIndex((p) => Math.max(0, p - 1))}
+                                disabled={safePageIndex === 0}
+                                className="rounded border border-stone-400 px-3 py-2 disabled:opacity-50"
+                            >
+                                <span className="inline-flex items-center gap-2">
+                                    <FaChevronLeft />
+                                    <span>Prev</span>
+                                </span>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setPageIndex((p) => Math.min(pageCount - 1, p + 1))
+                                }
+                                disabled={safePageIndex >= pageCount - 1}
+                                className="rounded border border-stone-400 px-3 py-2 disabled:opacity-50"
+                            >
+                                <span className="inline-flex items-center gap-2">
+                                    <span>Next</span>
+                                    <FaChevronRight />
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     );
 };
 
-export default Home;
+export default Blog;

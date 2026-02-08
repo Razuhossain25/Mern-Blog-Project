@@ -1,8 +1,15 @@
 import asifAbir from "../assets/images/Asif-Abir2.jpg";
+import { Helmet } from "react-helmet-async";
+import { useSiteSettings } from "../context/SiteSettingsContext";
 
 const About = () => {
+    const { settings } = useSiteSettings();
+    const siteTitle = settings?.websiteTitle || "MERN Blog";
     return (
         <div className="container mx-auto px-5 md:px-0 py-8 md:py-12">
+                    <Helmet>
+                        <title>{`About | ${siteTitle}`}</title>
+                    </Helmet>
                     <h1 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900 text-center">About Me</h1>
             <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
 
