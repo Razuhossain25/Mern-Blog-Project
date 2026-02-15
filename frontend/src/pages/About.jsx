@@ -16,7 +16,7 @@ const About = () => {
                 <div className="flex-shrink-0">
                     <img
                         src={asifAbir}
-                        alt="Asif Abir"
+                        alt="Razu Hossain"
                         className="shadow-lg rounded"
                     />
                 </div>
