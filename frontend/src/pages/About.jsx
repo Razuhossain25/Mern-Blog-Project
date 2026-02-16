@@ -25,7 +25,7 @@ const About = () => {
                     <h2 className="text-2xl font-semibold text-gray-800 mb-4">Full-Stack & MERN Developer</h2>
 
                     <p className="text-gray-700 leading-relaxed mb-6 text-lg">
-                        Hello, I'm <span className="font-semibold text-blue-600">Asif Mohammad Abir</span>, a passionate full-stack and MERN stack web developer. I specialize in transforming innovative ideas into high-quality digital solutions, focusing on creating engaging user interfaces that integrate seamlessly with robust backend systems.
+                        Hello, I'm <span className="font-semibold text-blue-600">Razu Hossain</span>, a passionate full-stack and MERN stack web developer. I specialize in transforming innovative ideas into high-quality digital solutions, focusing on creating engaging user interfaces that integrate seamlessly with robust backend systems.
                     </p>
 
                     <p className="text-gray-700 leading-relaxed mb-6 text-lg">
@@ -34,7 +34,7 @@ const About = () => {
 
                     <div className="bg-white rounded-lg p-4 border-l-4 border-blue-500">
                         <p className="text-gray-700 leading-relaxed text-lg">
-                            I hold certifications such as <span className="font-semibold">Zend Certified PHP Engineer</span> and <span className="font-semibold">Professional Web Developer (Level 4)</span> from NTVQF. I am dedicated to continuous learning and committed to delivering innovative solutions that harmonize aesthetic appeal with powerful functionality.
+                            <span className="font-semibold">Curre</span> and <span className="font-semibold">Currently studying B.Sc. in Computer Science and Engineering (CSE) at Presidency University</span>. I am dedicated to continuous learning and committed to delivering innovative solutions that harmonize aesthetic appeal with powerful functionality.
                         </p>
                     </div>
                 </div>

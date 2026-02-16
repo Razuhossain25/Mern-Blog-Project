@@ -63,15 +63,16 @@ const Contact = () => {
             </Helmet>
             <div className="container px-5 py-24 mx-auto flex sm:flex-nowrap flex-wrap">
                 <div className="lg:w-2/3 md:w-1/2 bg-gray-300 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-start relative">
-                    <iframe width="100%" height="100%" className="absolute inset-0" frameBorder={0} title="map" marginHeight={0} marginWidth={0} scrolling="no" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3652.3978091170275!2d90.3699062!3d23.7331895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755bfbe6c0bab8b%3A0x8784d7f5150e9ae3!2z4KaG4Ka44Ka_4KarIOCmhuCmrOCmv-CmsA!5e0!3m2!1sbn!2sbd!4v1765275814095!5m2!1sbn!2sbd" style={{ filter: 'grayscale(0) contrast(1.2) opacity(0.9)' }} />
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7294.836339254433!2d90.39493918940784!3d23.910242090135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c4f44db2f4fb%3A0xf7ace3e527556be9!2sTongi%20Govt.%20College!5e0!3m2!1sen!2sbd!4v1771247092003!5m2!1sen!2sbd" width={600} height={450} style={{border: 0}} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+
                     <div className="bg-white relative flex flex-wrap py-6 rounded shadow-md">
                         <div className="lg:w-1/2 px-6">
                             <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs">ADDRESS</h2>
-                            <p className="mt-1">9 Sher-E-Bangla Road, Hazaribagh, Dhaka-1209</p>
+                            <p className="mt-1">Tongi Dattapara </p>
                         </div>
                         <div className="lg:w-1/2 px-6 mt-4 lg:mt-0">
                             <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs">EMAIL</h2>
-                            <a className="text-indigo-500 leading-relaxed">asif.abir@hotmail.com</a>
+                            <a className="text-indigo-500 leading-relaxed">razuhossain@gmail.com</a>
                             <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs mt-4">PHONE</h2>
                             <p className="leading-relaxed">+8801955517560</p>
                             <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs mt-4">SOCIAL</h2>
